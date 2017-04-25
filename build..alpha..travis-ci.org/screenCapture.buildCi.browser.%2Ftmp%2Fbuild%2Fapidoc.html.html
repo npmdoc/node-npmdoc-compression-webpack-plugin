@@ -1,0 +1,355 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="http://github.com/webpack/compression-webpack-plugin">compression-webpack-plugin (v0.4.0)</a>
+</h1>
+<h4>Prepare compressed versions of assets to serve them with Content-Encoding</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.compression-webpack-plugin">module compression-webpack-plugin</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.compression-webpack-plugin.compression-webpack-plugin">
+            function <span class="apidocSignatureSpan"></span>compression-webpack-plugin
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.compression-webpack-plugin.index">
+            function <span class="apidocSignatureSpan">compression-webpack-plugin.</span>index
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">compression-webpack-plugin.</span>index.prototype</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.compression-webpack-plugin.index">module compression-webpack-plugin.index</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.compression-webpack-plugin.index.index">
+            function <span class="apidocSignatureSpan">compression-webpack-plugin.</span>index
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.compression-webpack-plugin.index.prototype">module compression-webpack-plugin.index.prototype</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.compression-webpack-plugin.index.prototype.apply">
+            function <span class="apidocSignatureSpan">compression-webpack-plugin.index.prototype.</span>apply
+            <span class="apidocSignatureSpan">(compiler)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.compression-webpack-plugin" id="apidoc.module.compression-webpack-plugin">module compression-webpack-plugin</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.compression-webpack-plugin.compression-webpack-plugin" id="apidoc.element.compression-webpack-plugin.compression-webpack-plugin">
+        function <span class="apidocSignatureSpan"></span>compression-webpack-plugin
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function CompressionPlugin(options) {
+	options = options || {};
+	this.asset = options.asset || "[path].gz[query]";
+	this.algorithm = options.algorithm || "gzip";
+	this.filename = options.filename || false;
+	this.compressionOptions = {};
+	if(typeof this.algorithm === "string") {
+		if (this.algorithm === "zopfli") {
+			try {
+				var zopfli = require("node-zopfli");
+			} catch(err) {
+				throw new Error("node-zopfli not found");
+			}
+			this.compressionOptions = {
+				verbose: options.hasOwnProperty('verbose') ? options.verbose : false,
+				verbose_more: options.hasOwnProperty('verbose_more') ? options.verbose_more : false,
+				numiterations: options.numiterations ? options.numiterations : 15,
+				blocksplitting: options.hasOwnProperty('blocksplitting') ? options.blocksplitting : true,
+				blocksplittinglast: options.hasOwnProperty('blocksplittinglast') ? options.blocksplittinglast : false,
+				blocksplittingmax: options.blocksplittingmax ? options.blocksplittingmax : 15
+			};
+			this.algorithm = function (content, options, fn) {
+				zopfli.gzip(content, options, fn);
+			};
+		} else {
+			var zlib = require("zlib");
+			this.algorithm = zlib[this.algorithm];
+			if(!this.algorithm) throw new Error("Algorithm not found in zlib");
+			this.compressionOptions = {
+				level: options.level || 9,
+				flush: options.flush,
+				chunkSize: options.chunkSize,
+				windowBits: options.windowBits,
+				memLevel: options.memLevel,
+				strategy: options.strategy,
+				dictionary: options.dictionary
+			};
+		}
+	}
+	this.test = options.test || options.regExp;
+	this.threshold = options.threshold || 0;
+	this.minRatio = options.minRatio || 0.8;
+	this.deleteOriginalAssets = options.deleteOriginalAssets || false;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.compression-webpack-plugin.index" id="apidoc.element.compression-webpack-plugin.index">
+        function <span class="apidocSignatureSpan">compression-webpack-plugin.</span>index
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function CompressionPlugin(options) {
+	options = options || {};
+	this.asset = options.asset || "[path].gz[query]";
+	this.algorithm = options.algorithm || "gzip";
+	this.filename = options.filename || false;
+	this.compressionOptions = {};
+	if(typeof this.algorithm === "string") {
+		if (this.algorithm === "zopfli") {
+			try {
+				var zopfli = require("node-zopfli");
+			} catch(err) {
+				throw new Error("node-zopfli not found");
+			}
+			this.compressionOptions = {
+				verbose: options.hasOwnProperty('verbose') ? options.verbose : false,
+				verbose_more: options.hasOwnProperty('verbose_more') ? options.verbose_more : false,
+				numiterations: options.numiterations ? options.numiterations : 15,
+				blocksplitting: options.hasOwnProperty('blocksplitting') ? options.blocksplitting : true,
+				blocksplittinglast: options.hasOwnProperty('blocksplittinglast') ? options.blocksplittinglast : false,
+				blocksplittingmax: options.blocksplittingmax ? options.blocksplittingmax : 15
+			};
+			this.algorithm = function (content, options, fn) {
+				zopfli.gzip(content, options, fn);
+			};
+		} else {
+			var zlib = require("zlib");
+			this.algorithm = zlib[this.algorithm];
+			if(!this.algorithm) throw new Error("Algorithm not found in zlib");
+			this.compressionOptions = {
+				level: options.level || 9,
+				flush: options.flush,
+				chunkSize: options.chunkSize,
+				windowBits: options.windowBits,
+				memLevel: options.memLevel,
+				strategy: options.strategy,
+				dictionary: options.dictionary
+			};
+		}
+	}
+	this.test = options.test || options.regExp;
+	this.threshold = options.threshold || 0;
+	this.minRatio = options.minRatio || 0.8;
+	this.deleteOriginalAssets = options.deleteOriginalAssets || false;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.compression-webpack-plugin.index" id="apidoc.module.compression-webpack-plugin.index">module compression-webpack-plugin.index</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.compression-webpack-plugin.index.index" id="apidoc.element.compression-webpack-plugin.index.index">
+        function <span class="apidocSignatureSpan">compression-webpack-plugin.</span>index
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function CompressionPlugin(options) {
+	options = options || {};
+	this.asset = options.asset || "[path].gz[query]";
+	this.algorithm = options.algorithm || "gzip";
+	this.filename = options.filename || false;
+	this.compressionOptions = {};
+	if(typeof this.algorithm === "string") {
+		if (this.algorithm === "zopfli") {
+			try {
+				var zopfli = require("node-zopfli");
+			} catch(err) {
+				throw new Error("node-zopfli not found");
+			}
+			this.compressionOptions = {
+				verbose: options.hasOwnProperty('verbose') ? options.verbose : false,
+				verbose_more: options.hasOwnProperty('verbose_more') ? options.verbose_more : false,
+				numiterations: options.numiterations ? options.numiterations : 15,
+				blocksplitting: options.hasOwnProperty('blocksplitting') ? options.blocksplitting : true,
+				blocksplittinglast: options.hasOwnProperty('blocksplittinglast') ? options.blocksplittinglast : false,
+				blocksplittingmax: options.blocksplittingmax ? options.blocksplittingmax : 15
+			};
+			this.algorithm = function (content, options, fn) {
+				zopfli.gzip(content, options, fn);
+			};
+		} else {
+			var zlib = require("zlib");
+			this.algorithm = zlib[this.algorithm];
+			if(!this.algorithm) throw new Error("Algorithm not found in zlib");
+			this.compressionOptions = {
+				level: options.level || 9,
+				flush: options.flush,
+				chunkSize: options.chunkSize,
+				windowBits: options.windowBits,
+				memLevel: options.memLevel,
+				strategy: options.strategy,
+				dictionary: options.dictionary
+			};
+		}
+	}
+	this.test = options.test || options.regExp;
+	this.threshold = options.threshold || 0;
+	this.minRatio = options.minRatio || 0.8;
+	this.deleteOriginalAssets = options.deleteOriginalAssets || false;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.compression-webpack-plugin.index.prototype" id="apidoc.module.compression-webpack-plugin.index.prototype">module compression-webpack-plugin.index.prototype</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.compression-webpack-plugin.index.prototype.apply" id="apidoc.element.compression-webpack-plugin.index.prototype.apply">
+        function <span class="apidocSignatureSpan">compression-webpack-plugin.index.prototype.</span>apply
+        <span class="apidocSignatureSpan">(compiler)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">apply = function (compiler) {
+	compiler.plugin("this-compilation", function(compilation) {
+		compilation.plugin("optimize-assets", function(assets, callback) {
+			async.forEach(Object.keys(assets), function(file, callback) {
+				if(Array.isArray(this.test)) {
+					if(this.test.every(function(t) {
+						return !t.test(file);
+					})) return callback();
+				} else if(this.test &amp;&amp; !this.test.test(file))
+					return callback();
+				var asset = assets[file];
+				var content = asset.source();
+				if(!Buffer.isBuffer(content))
+					content = new Buffer(content, "utf-8");
+				var originalSize = content.length;
+				if(originalSize &lt; this.threshold) return callback();
+				this.algorithm(content, this.compressionOptions, function(err, result) {
+					if(err) return callback(err);
+					if(result.length / originalSize &gt; this.minRatio) return callback();
+					var parse = url.parse(file);
+					var sub = {
+						file: file,
+						path: parse.pathname,
+						query: parse.query || ""
+					};
+					var newFile = this.asset.replace(/\[(file|path|query)\]/g, function(p0,p1) {
+						return sub[p1];
+					});
+					if (typeof this.filename === 'function') {
+						newFile = this.filename(newFile);
+					}					
+					assets[newFile] = new RawSource(result);
+					if (this.deleteOriginalAssets) {
+						delete assets[file];
+					}
+					callback();
+				}.bind(this));
+			}.bind(this), callback);
+		}.bind(this));
+	}.bind(this));
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
